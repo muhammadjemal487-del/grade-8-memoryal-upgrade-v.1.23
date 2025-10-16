@@ -1,0 +1,259 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sami Papa BMW Gallery</title>
+    <style>
+        body {
+            font-family: 'Courier New', Courier, monospace;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(to right, #0f2027, #203a43, #2c5364);
+            color: #fff;
+            text-align: center;
+        }
+
+        /* --- LOGIN SCREEN --- */
+        #login-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            z-index: 9999;
+        }
+
+        #login-screen input {
+            padding: 12px;
+            border-radius: 10px;
+            border: 2px solid #ff416c;
+            margin: 10px;
+            font-size: 16px;
+            outline: none;
+        }
+
+        #login-screen button {
+            padding: 12px 25px;
+            font-size: 16px;
+            border: none;
+            border-radius: 10px;
+            background: linear-gradient(90deg, #ff416c, #ff4b2b);
+            color: white;
+            cursor: pointer;
+            margin: 10px;
+        }
+
+        .developed-by {
+            margin-top: 60px;
+            font-size: 20px;
+            color: #ff7f50;
+            text-shadow: 1px 1px 2px #000;
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        #login-screen button:hover {
+            transform: scale(1.05);
+        }
+
+        #login-screen label {
+            cursor: pointer;
+            font-size: 14px;
+            color: #fff;
+        }
+
+        h1 {
+            font-size: 3em;
+            margin: 20px 0;
+            text-shadow: 0 0 15px #ff416c;
+        }
+
+        .gallery {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            margin-bottom: 40px;
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .gallery img {
+            width: 250px;
+            height: 180px;
+            object-fit: cover;
+            border-radius: 15px;
+            border: 3px solid #ff416c;
+            box-shadow: 0 8px 20px rgba(255, 65, 108, 0.7);
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+        }
+
+        .gallery img:hover {
+            transform: scale(1.1);
+            box-shadow: 0 12px 35px rgba(255, 65, 108, 0.9);
+        }
+
+        .comment-section {
+            max-width: 700px;
+            margin: 30px auto 50px auto;
+            text-align: left;
+            background: rgba(255, 255, 255, 0.05);
+            padding: 25px;
+            border-radius: 20px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.6);
+            backdrop-filter: blur(10px);
+            opacity: 0;
+            transition: opacity 0.5s ease;
+        }
+
+        .comment-section h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            text-shadow: 0 0 10px #ff416c;
+        }
+
+        .comment-section input,
+        .comment-section textarea {
+            width: 100%;
+            padding: 12px;
+            border-radius: 12px;
+            border: 2px solid #ff416c;
+            margin-bottom: 10px;
+            font-size: 16px;
+            background: rgba(255, 255, 255, 0.1);
+            color: #fff;
+            outline: none;
+        }
+
+        .comment-section button {
+            padding: 12px 25px;
+            font-size: 16px;
+            background: linear-gradient(90deg, #ff416c, #ff4b2b);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            box-shadow: 0 8px 25px rgba(255, 65, 108, 0.6);
+        }
+
+        .comment-section button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 12px 35px rgba(255, 65, 108, 0.9);
+        }
+
+        .comment-list .comment {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 12px;
+            margin-bottom: 12px;
+            border-left: 5px solid #ff416c;
+            border-radius: 10px;
+            color: #fff;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.5);
+        }
+    </style>
+</head>
+
+<body>
+
+    <div id="login-screen">
+        <h2>Enter Username & Password</h2>
+        <input type="text" id="username" placeholder="Username">
+        <input type="password" id="password" placeholder="Password">
+        <label><input type="checkbox" id="show-pass"> Show Password</label>
+        <button onclick="checkLogin()">Login</button>
+        <p style="color:#ff4b2b;" id="error-msg"></p>
+    </div>
+
+    <h1>Sami Papa BMW Gallery</h1>
+
+    <div class="gallery">
+        <img src="bmw.jpg" alt="BMW 1">
+        <img src="bmw2.jpg" alt="BMW 2">
+        <img src="bmw3.jpg" alt="BMW 3">
+        <img src="bmw4.jpg" alt="BMW 4">
+        <img src="bmw5.jpg" alt="BMW 5">
+    </div>
+
+    <div class="comment-section">
+        <h2>💬 Public Comments</h2>
+        <input type="text" id="name" placeholder="Your name (optional)">
+        <textarea id="comment-input" placeholder="Write your comment here..." maxlength="500"></textarea>
+        <button id="postBtn">Post Comment</button>
+        <div class="comment-list" id="comment-list"></div>
+    </div>
+
+    <p class="developed-by">Developed by MUHAMMED JEMAL & ABDULHAKEM HASEN</p>
+
+    <script>
+        // --- SHOW/HIDE PASSWORD ---
+        const showPass = document.getElementById('show-pass');
+        const passwordInput = document.getElementById('password');
+        showPass.addEventListener('change', () => {
+            passwordInput.type = showPass.checked ? 'text' : 'password';
+        });
+
+        // --- LOGIN ---
+        function checkLogin() {
+            const username = document.getElementById('username').value.trim();
+            const password = passwordInput.value;
+            if (!username) {
+                document.getElementById('error-msg').innerText = "Enter a username!";
+                return;
+            }
+            if (password === "samipapa") {
+                document.getElementById('login-screen').style.display = "none";
+                document.querySelector('.gallery').style.opacity = 1;
+                document.querySelector('.comment-section').style.opacity = 1;
+            } else {
+                document.getElementById('error-msg').innerText = "Wrong password!";
+            }
+        }
+
+        // --- COMMENTS ---
+        const STORAGE_KEY = "sami_comments_public";
+        let comments = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+
+        const nameInput = document.getElementById("name");
+        const commentInput = document.getElementById("comment-input");
+        const postBtn = document.getElementById("postBtn");
+        const commentList = document.getElementById("comment-list");
+
+        function escapeHtml(text) {
+            return text.replace(/[&<>"']/g, m => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" }[m]));
+        }
+
+        function renderComments() {
+            commentList.innerHTML = "";
+            if (comments.length === 0) { commentList.innerHTML = "<p style='color:#ccc'>No comments yet — be the first!</p>"; return; }
+            comments.slice().reverse().forEach(c => {
+                const div = document.createElement("div");
+                div.className = "comment";
+                div.innerHTML = `<strong>${escapeHtml(c.name || "Anonymous")}</strong>: ${escapeHtml(c.text)}`;
+                commentList.appendChild(div);
+            });
+        }
+
+        function saveComments() { localStorage.setItem(STORAGE_KEY, JSON.stringify(comments)); }
+
+        postBtn.addEventListener("click", () => {
+            const text = commentInput.value.trim();
+            if (!text) return;
+            const newComment = { id: Date.now().toString(), name: nameInput.value.trim(), text };
+            comments.push(newComment);
+            saveComments();
+            renderComments();
+            commentInput.value = "";
+        });
+
+        renderComments();
+    </script>
+</body>
+
+</html>

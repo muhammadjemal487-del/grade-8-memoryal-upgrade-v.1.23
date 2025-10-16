@@ -1,0 +1,349 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mikael Tamrat Gallery</title>
+    <style>
+        /* === BODY & BACKGROUND === */
+        body {
+            font-family: 'Courier New', monospace;
+            background: linear-gradient(135deg, #101010, #1a1a1a, #222);
+            text-align: center;
+            margin: 0;
+            padding: 30px;
+            color: #f2f2f2;
+        }
+
+        /* === LOGIN OVERLAY === */
+        #loginOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            z-index: 9999;
+        }
+
+        #loginBox {
+            background: #111;
+            color: #fff;
+            padding: 30px;
+            border-radius: 15px;
+            width: 320px;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(0, 255, 120, 0.6);
+        }
+
+        #loginBox input[type=password] {
+            width: 80%;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 10px;
+            border: 1px solid #00ff88;
+            background: #222;
+            color: #fff;
+            font-size: 16px;
+        }
+
+        #loginBox button {
+            padding: 10px 20px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            background: linear-gradient(90deg, #00ff88, #4affb0);
+            color: #101010;
+            margin-top: 10px;
+            transition: 0.3s;
+        }
+
+        #loginBox button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px #00ff88;
+        }
+
+        #togglePass {
+            margin-left: 5px;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background: #00ff88;
+            color: #111;
+        }
+
+        #loginError {
+            color: red;
+            display: none;
+            margin-top: 5px;
+        }
+
+        /* === GALLERY === */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 25px;
+            max-width: 1200px;
+            margin: 0 auto 50px auto;
+        }
+
+        .developed-by {
+            margin-top: 60px;
+            font-size: 20px;
+            color: #ff7f50;
+            text-shadow: 1px 1px 2px #000;
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        .gallery img {
+            width: 100%;
+            height: 230px;
+            object-fit: cover;
+            border-radius: 20px;
+            border: 2px solid #00ff88;
+            box-shadow: 0 0 25px rgba(0, 255, 170, 0.5);
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .gallery img:hover {
+            transform: scale(1.1) rotate(1deg);
+            box-shadow: 0 0 35px rgba(0, 255, 140, 0.8), 0 0 60px rgba(0, 255, 170, 0.5);
+            filter: brightness(1.3) saturate(1.4);
+        }
+
+        /* === TELEGRAM BUTTON === */
+        .bnt {
+            display: inline-block;
+            margin: 25px 0 60px 0;
+            padding: 18px 45px;
+            font-size: 22px;
+            font-weight: bold;
+            text-transform: uppercase;
+            background: linear-gradient(90deg, #00ff88, #4affb0);
+            color: #101010;
+            border: none;
+            border-radius: 15px;
+            cursor: pointer;
+            text-decoration: none;
+            box-shadow: 0 0 25px #00ff88, 0 0 60px rgba(0, 255, 170, 0.7);
+            transition: all 0.3s ease;
+        }
+
+        .bnt:hover {
+            transform: scale(1.1);
+            background: linear-gradient(90deg, #4effb6, #00ffc3);
+            box-shadow: 0 0 35px #00ffc3, 0 0 80px rgba(0, 255, 195, 0.9);
+        }
+
+        /* === COMMENT SECTION === */
+        .comment-section {
+            max-width: 800px;
+            margin: 60px auto;
+            text-align: left;
+            background: rgba(20, 20, 20, 0.95);
+            padding: 30px;
+            border-radius: 18px;
+            box-shadow: 0 0 35px rgba(0, 255, 150, 0.7);
+            border: 2px solid #00ff99;
+        }
+
+        .comment-section h2 {
+            text-align: center;
+            color: #00ff88;
+            font-size: 26px;
+            margin-bottom: 20px;
+            text-shadow: 0 0 15px #00ff88;
+        }
+
+        input[type=text],
+        textarea {
+            width: 100%;
+            padding: 14px;
+            margin: 10px 0;
+            border: 1px solid #00ffaa;
+            border-radius: 10px;
+            background: #111;
+            color: #fff;
+            font-size: 15px;
+            box-shadow: inset 0 0 10px rgba(0, 255, 170, 0.3);
+        }
+
+        input::placeholder,
+        textarea::placeholder {
+            color: #bbb;
+        }
+
+        button.post {
+            padding: 14px 25px;
+            background: linear-gradient(90deg, #00ff99, #00ffc8);
+            color: #111;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            font-size: 17px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 20px rgba(0, 255, 150, 0.8);
+        }
+
+        button.post:hover {
+            transform: scale(1.08);
+            background: linear-gradient(90deg, #4affb0, #00ffe0);
+            box-shadow: 0 0 40px rgba(0, 255, 210, 0.9);
+        }
+
+        /* === COMMENTS === */
+        .comment {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            background: #1b1b1b;
+            border: 1px solid #00ff99;
+            border-radius: 10px;
+            padding: 15px;
+            margin-top: 15px;
+            box-shadow: 0 0 15px rgba(0, 255, 120, 0.3);
+        }
+
+        .comment img.avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            border: 2px solid #00ffaa;
+            box-shadow: 0 0 10px #00ffb6;
+        }
+
+        .comment .name {
+            font-weight: bold;
+            color: #00ffcc;
+        }
+
+        .comment .time {
+            font-size: 12px;
+            color: #ccc;
+        }
+
+        .comment .text {
+            margin-top: 5px;
+            color: #eee;
+        }
+    </style>
+</head>
+
+<body>
+
+    <h1>🔥 Mikael Tamrat Gallery 🔥</h1>
+
+    <!-- LOGIN -->
+    <div id="loginOverlay">
+        <div id="loginBox">
+            <h2>🔐 Enter Password</h2>
+            <input type="password" id="passwordInput" placeholder="Password">
+            <button id="togglePass">Show</button>
+            <button id="loginBtn">Login</button>
+            <p id="loginError">❌ Incorrect password</p>
+        </div>
+    </div>
+
+    <!-- GALLERY -->
+    <div id="protectedContent" style="display:none;">
+        <div class="gallery">
+            <img src="ki.jpg" alt="">
+            <img src="ki2.jpg" alt="">
+            <img src="ki3.jpg" alt="">
+            <img src="ki4.jpg" alt="">
+            <img src="ki5.jpg" alt="">
+            <img src="ki6.jpg" alt="">
+            <img src="ki7.jpg" alt="">
+        </div>
+
+        <a href="https://t.me/YourTelegramHandle" class="bnt">Join Telegram</a>
+
+        <!-- COMMENT BOX -->
+        <div class="comment-section">
+            <h2>💬 Leave a Comment</h2>
+            <input type="text" id="name" placeholder="Your name (optional)">
+            <textarea id="comment" placeholder="Write your comment..." maxlength="500"></textarea>
+            <button class="post" id="postBtn">Post Comment</button>
+            <div id="comments"></div>
+        </div>
+    </div>
+
+    <p class="developed-by">Developed by MUHAMMED JEMAL & ABDULHAKEM HASEN</p>
+
+    <script>
+        const PASSWORD = "miketame";
+        const loginOverlay = document.getElementById("loginOverlay");
+        const passwordInput = document.getElementById("passwordInput");
+        const loginBtn = document.getElementById("loginBtn");
+        const togglePass = document.getElementById("togglePass");
+        const loginError = document.getElementById("loginError");
+        const protectedContent = document.getElementById("protectedContent");
+
+        // Toggle password visibility
+        togglePass.addEventListener("click", () => {
+            if (passwordInput.type === "password") { passwordInput.type = "text"; togglePass.textContent = "Hide"; }
+            else { passwordInput.type = "password"; togglePass.textContent = "Show"; }
+        });
+
+        // Login check
+        loginBtn.addEventListener("click", () => {
+            if (passwordInput.value === PASSWORD) {
+                loginOverlay.style.display = "none";
+                protectedContent.style.display = "block";
+            } else {
+                loginError.style.display = "block";
+                passwordInput.value = "";
+            }
+        });
+
+        // COMMENTS
+        const STORAGE_KEY = "mike_comments";
+        const nameInput = document.getElementById("name");
+        const commentInput = document.getElementById("comment");
+        const postBtn = document.getElementById("postBtn");
+        const commentsWrap = document.getElementById("comments");
+        let comments = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+
+        function escapeHtml(text) { return text.replace(/[&<>"']/g, m => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#039;" }[m])); }
+        function timeAgo(ts) { const diff = Date.now() - ts; const sec = Math.floor(diff / 1000); if (sec < 60) return sec + "s ago"; const min = Math.floor(sec / 60); if (min < 60) return min + "m ago"; const hr = Math.floor(min / 60); if (hr < 24) return hr + "h ago"; const d = Math.floor(hr / 24); return d + "d ago"; }
+
+        function renderComments() {
+            commentsWrap.innerHTML = "";
+            if (comments.length === 0) { commentsWrap.innerHTML = "<p style='color:#888;text-align:center;'>No comments yet — be the first!</p>"; return; }
+            comments.slice().reverse().forEach(c => {
+                const div = document.createElement("div"); div.className = "comment";
+                div.innerHTML = `<img src="user1.jpg" alt="User Avatar" class="avatar">
+      <div>
+        <div class="name">${escapeHtml(c.name || "Anonymous")}</div>
+        <div class="time">${timeAgo(c.ts)}</div>
+        <div class="text">${escapeHtml(c.text)}</div>
+      </div>`;
+                commentsWrap.appendChild(div);
+            });
+        }
+
+        postBtn.addEventListener("click", () => {
+            const text = commentInput.value.trim();
+            if (!text) return;
+            const newComment = { text, name: nameInput.value.trim(), ts: Date.now() };
+            comments.push(newComment);
+            localStorage.setItem(STORAGE_KEY, JSON.stringify(comments));
+            renderComments();
+            commentInput.value = "";
+        });
+
+        renderComments();
+    </script>
+
+</body>
+
+</html>

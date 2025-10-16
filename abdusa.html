@@ -1,0 +1,293 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Gallery with Comments</title>
+    <style>
+        body {
+            font-family: 'Courier New', monospace;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #2f2f2f, #3c3c3c);
+            color: #fff;
+            text-align: center;
+        }
+
+        h1 {
+            font-size: 36px;
+            color: #00ff99;
+            margin-bottom: 20px;
+            text-shadow: 0 0 15px #00ff88;
+        }
+
+        /* Login overlay */
+        #loginOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        #loginBox {
+            background: #fff;
+            color: #000;
+            padding: 30px;
+            border-radius: 15px;
+            width: 300px;
+            text-align: center;
+            box-shadow: 0 0 30px rgba(0, 255, 120, 0.6);
+        }
+
+        .developed-by {
+            margin-top: 60px;
+            font-size: 20px;
+            color: #ff7f50;
+            text-shadow: 1px 1px 2px #000;
+            font-family: 'Times New Roman', Times, serif;
+        }
+
+        #loginBox input {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 10px;
+            border-radius: 10px;
+            border: 1px solid #aaa;
+            font-size: 16px;
+        }
+
+        #loginBox button {
+            background: linear-gradient(90deg, #00ff88, #00c96a);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 10px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        #loginBox button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 15px rgba(0, 255, 120, 0.8);
+        }
+
+        #loginError {
+            color: red;
+            display: none;
+            margin-top: 5px;
+        }
+
+        .show-pass {
+            background: #ccc;
+            border: none;
+            padding: 5px 10px;
+            cursor: pointer;
+            margin-left: 5px;
+            border-radius: 5px;
+        }
+
+        /* Gallery */
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            max-width: 1000px;
+            margin: 30px auto;
+        }
+
+        .gallery img {
+            width: 100%;
+            height: 220px;
+            object-fit: cover;
+            border-radius: 15px;
+            transition: transform 0.3s, box-shadow 0.3s;
+            cursor: pointer;
+            box-shadow: 0 0 20px rgba(0, 255, 120, 0.4);
+        }
+
+        .gallery img:hover {
+            transform: scale(1.08);
+            box-shadow: 0 0 40px rgba(0, 255, 150, 0.9);
+        }
+
+        /* Fullscreen */
+        #fullscreenImg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        #fullscreenImg img {
+            max-width: 90%;
+            max-height: 90%;
+            border-radius: 10px;
+        }
+
+        /* Comment box */
+        .comment-section {
+            max-width: 800px;
+            margin: 40px auto;
+            background: #1e1e1e;
+            padding: 25px;
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(0, 255, 120, 0.4);
+        }
+
+        .comment-section h2 {
+            color: #41ff7a;
+            text-shadow: 0 0 10px #00ff8f;
+        }
+
+        textarea {
+            width: 100%;
+            border-radius: 10px;
+            border: none;
+            padding: 12px;
+            margin: 10px 0;
+            font-size: 15px;
+            resize: vertical;
+        }
+
+        .comment-section button {
+            margin-top: 10px;
+        }
+
+        #commentList div {
+            margin: 10px 0;
+            padding: 10px;
+            border-radius: 8px;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- LOGIN -->
+    <div id="loginOverlay">
+        <div id="loginBox">
+            <h2>Login</h2>
+            <input type="text" id="usernameInput" placeholder="Enter Username">
+            <input type="password" id="passwordInput" placeholder="Password">
+            <button class="show-pass" id="togglePass">Show</button><br><br>
+            <button id="loginBtn">Login</button>
+            <p id="loginError">❌ Please enter username</p>
+        </div>
+    </div>
+
+    <h1>🌟 Personal Gallery</h1>
+    <div class="gallery" id="gallery">
+        <img src="a1.jpg" alt="">
+        <img src="a2.jpg" alt="">
+        <img src="a3.jpg" alt="">
+        <img src="a4.jpg" alt="">
+        <img src="a5.jpg" alt="">
+        <img src="a6.jpg" alt="">
+        <img src="a7.jpg" alt="">
+        <img src="a8.jpg" alt="">
+        <img src="a9.jpg" alt="">
+        <img src="a10.jpg" alt="">
+        <img src="a111.jpg" alt="">
+        <img src="a12.jpg" alt="">
+        <img src="a13.jpg" alt="">
+
+    </div>
+
+    <div id="fullscreenImg"><img src=""></div>
+
+    <div class="comment-section">
+        <h2>💬 Comments</h2>
+        <textarea id="commentBox" placeholder="Write a comment..." rows="4"></textarea><br>
+        <button id="postComment">Post</button>
+        <div id="commentList"></div>
+    </div>
+
+    <p class="developed-by">Developed by MUHAMMED JEMAL & ABDULHAKEM HASEN</p>
+
+    <script>
+        const PASSWORD = "abdusa";
+        const loginOverlay = document.getElementById("loginOverlay");
+        const usernameInput = document.getElementById("usernameInput");
+        const passwordInput = document.getElementById("passwordInput");
+        const loginBtn = document.getElementById("loginBtn");
+        const loginError = document.getElementById("loginError");
+        const togglePass = document.getElementById("togglePass");
+
+        let username = "";
+
+        // Show/hide password
+        togglePass.addEventListener("click", () => {
+            if (passwordInput.type === "password") { passwordInput.type = "text"; togglePass.textContent = "Hide"; }
+            else { passwordInput.type = "password"; togglePass.textContent = "Show"; }
+        });
+
+        // Login overlay hides when username entered
+        loginBtn.addEventListener("click", () => {
+            username = usernameInput.value.trim();
+            if (username === "") { loginError.style.display = "block"; }
+            else { loginOverlay.style.display = "none"; loginError.style.display = "none"; renderComments(); }
+        });
+
+        // Fullscreen gallery
+        const galleryImgs = document.querySelectorAll(".gallery img");
+        const fullscreenOverlay = document.getElementById("fullscreenImg");
+        const fullscreenImage = fullscreenOverlay.querySelector("img");
+        galleryImgs.forEach(img => { img.addEventListener("click", () => { fullscreenImage.src = img.src; fullscreenOverlay.style.display = "flex"; }); });
+        fullscreenOverlay.addEventListener("click", () => { fullscreenOverlay.style.display = "none"; });
+
+        // Comments
+        const commentBox = document.getElementById("commentBox");
+        const postComment = document.getElementById("postComment");
+        const commentList = document.getElementById("commentList");
+        let comments = JSON.parse(localStorage.getItem("comments") || "[]");
+
+        // Add public comment
+        const publicComment = { user: "Admin", text: "Welcome! Enjoy the gallery 🌟" };
+        if (!comments.some(c => c.user === "Admin" && c.text === publicComment.text)) comments.push(publicComment);
+
+        // Render comments
+        function renderComments() {
+            commentList.innerHTML = "";
+            // Public comment first
+            comments.filter(c => c.user === "Admin").forEach(c => {
+                const div = document.createElement("div");
+                div.style.background = "#444";
+                div.innerHTML = `<strong>${c.user}</strong>: ${c.text}`;
+                commentList.appendChild(div);
+            });
+            // User-specific comments
+            comments.filter(c => c.user === username).forEach(c => {
+                const div = document.createElement("div");
+                div.style.background = "#222";
+                div.innerHTML = `<strong>${c.user}</strong>: ${c.text}`;
+                commentList.appendChild(div);
+            });
+        }
+
+        // Post user comment
+        postComment.addEventListener("click", () => {
+            const text = commentBox.value.trim();
+            if (!text) return;
+            comments.push({ user: username, text });
+            localStorage.setItem("comments", JSON.stringify(comments));
+            commentBox.value = "";
+            renderComments();
+        });
+    </script>
+</body>
+
+</html>

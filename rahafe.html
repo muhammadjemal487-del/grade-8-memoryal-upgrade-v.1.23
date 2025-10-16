@@ -1,0 +1,380 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RAHAF GALLERY</title>
+    <style>
+        /* === BODY & BACKGROUND === */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #ffe6f0, #ffe0b2);
+            color: #222;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        /* === LOGIN OVERLAY === */
+        #loginOverlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            z-index: 9999;
+        }
+
+        #loginBox {
+            background: #111;
+            color: #fff;
+            padding: 40px;
+            border-radius: 20px;
+            width: 360px;
+            text-align: center;
+            box-shadow: 0 0 40px rgba(255, 65, 108, 0.7);
+            animation: pop 0.5s ease;
+        }
+
+        @keyframes pop {
+            0% {
+                transform: scale(0.7);
+                opacity: 0;
+            }
+
+            100% {
+                transform: scale(1);
+                opacity: 1;
+            }
+        }
+
+        #loginBox input {
+            width: 80%;
+            padding: 12px;
+            margin: 10px 0;
+            border-radius: 10px;
+            border: 1px solid #ff416c;
+            background: #222;
+            color: #fff;
+            font-size: 16px;
+        }
+
+        #loginBox button {
+            padding: 12px 25px;
+            border-radius: 10px;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            background: linear-gradient(90deg, #ff416c, #ff4b2b);
+            color: #fff;
+            margin-top: 10px;
+            transition: 0.3s;
+            font-size: 16px;
+        }
+
+        #loginBox button:hover {
+            transform: scale(1.05);
+            box-shadow: 0 0 20px #ff416c;
+        }
+
+        #togglePass {
+            margin-left: 5px;
+            padding: 5px 10px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            background: #ff416c;
+            color: #fff;
+        }
+
+        #loginError {
+            color: #ff4b2b;
+            display: none;
+            margin-top: 8px;
+            font-weight: bold;
+        }
+
+        /* === HEADING & GALLERY === */
+        h1 {
+            margin-top: 30px;
+            font-size: 54px;
+            color: #ff416c;
+            text-shadow: 3px 3px 15px rgba(0, 0, 0, 0.4);
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        .gallery {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 20px;
+            max-width: 1200px;
+            margin: 30px auto;
+            padding: 0 20px;
+        }
+
+        .gallery img {
+            width: 100%;
+            height: 260px;
+            object-fit: cover;
+            border-radius: 20px;
+            border: 3px solid transparent;
+            box-shadow: 0 10px 35px rgba(0, 0, 0, 0.5);
+            transition: all 0.3s;
+            cursor: pointer;
+        }
+
+        .gallery img:hover {
+            transform: scale(1.1) rotate(1deg);
+            box-shadow: 0 20px 50px rgba(255, 65, 108, 0.8);
+            border: 3px solid #ff416c;
+            filter: brightness(1.2) saturate(1.3);
+        }
+
+        .bnt {
+            margin: 20px 0 50px 0;
+            padding: 20px 60px;
+            font-size: 24px;
+            font-weight: bold;
+            text-transform: uppercase;
+            background: linear-gradient(90deg, #ff416c, #ff4b2b);
+            color: white;
+            border: none;
+            border-radius: 25px;
+            cursor: pointer;
+            box-shadow: 0 15px 40px rgba(255, 65, 108, 0.7);
+            transition: all 0.3s;
+        }
+
+        .bnt:hover {
+            transform: scale(1.15) translateY(-3px);
+            box-shadow: 0 25px 55px rgba(255, 65, 108, 0.9);
+            background: linear-gradient(90deg, #ff4b2b, #ff416c);
+        }
+
+        /* === COMMENT SECTION === */
+        .comment-section {
+            max-width: 800px;
+            margin: 50px auto 60px auto;
+            text-align: left;
+            background: #fff;
+            padding: 30px;
+            border-radius: 25px;
+            box-shadow: 0 0 45px rgba(255, 65, 108, 0.5);
+        }
+
+        .comment-section h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            font-size: 28px;
+            color: #ff416c;
+        }
+
+        input[type=text],
+        input[type=password],
+        textarea {
+            width: 100%;
+            padding: 14px;
+            margin: 10px 0;
+            border: 2px solid #ff416c;
+            border-radius: 15px;
+            font-size: 16px;
+            outline: none;
+            resize: vertical;
+        }
+
+        input:focus,
+        textarea:focus {
+            border-color: #ff4b2b;
+            box-shadow: 0 0 20px rgba(255, 65, 108, 0.5);
+        }
+
+        button.post {
+            padding: 14px 30px;
+            background: linear-gradient(90deg, #ff416c, #ff4b2b);
+            color: white;
+            border: none;
+            border-radius: 15px;
+            font-size: 18px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 12px 35px rgba(255, 65, 108, 0.7);
+            transition: 0.3s;
+        }
+
+        button.post:hover {
+            transform: scale(1.08) translateY(-2px);
+            box-shadow: 0 20px 50px rgba(255, 65, 108, 0.9);
+        }
+
+        .comment {
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            background: #f7f7f7;
+            border-radius: 15px;
+            padding: 14px;
+            margin-top: 15px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            border-left: 5px solid #ff416c;
+        }
+
+        .comment .name {
+            font-weight: bold;
+            color: #ff416c;
+        }
+
+        .comment .time {
+            font-size: 12px;
+            color: #777;
+        }
+
+        .comment .text {
+            margin-top: 5px;
+            white-space: pre-wrap;
+        }
+
+        .developed-by {
+            margin-top: 50px;
+            font-size: 20px;
+            color: #ff7f50;
+            text-shadow: 1px 1px 2px #000;
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- LOGIN OVERLAY -->
+    <div id="loginOverlay">
+        <div id="loginBox">
+            <h2>Login</h2>
+            <input type="text" id="usernameInput" placeholder="Enter username">
+            <div id="passwordContainer" style="display:none;">
+                <input type="password" id="passwordInput" placeholder="Enter password">
+                <button id="togglePass">Show</button>
+            </div>
+            <button id="loginBtn">Login</button>
+            <div id="loginError">Wrong password!</div>
+        </div>
+    </div>
+
+    <h1>RAHAF GALLERY</h1>
+
+    <div class="gallery">
+        <img src="r1.jpg" alt="">
+        <img src="r2.jpg" alt="">
+        <img src="r3.jpg" alt="">
+        <img src="r4.jpg" alt="">
+        <img src="r5.jpg" alt="">
+        <img src="r6.jpg" alt="">
+    </div>
+
+    <a href="https://t.me/Rahaf_7320"><button class="bnt">Telegram</button></a>
+
+    <div class="comment-section">
+        <h2>💬 Leave a Comment</h2>
+        <input type="text" id="name" placeholder="Your name (optional)">
+        <textarea id="comment" placeholder="Write your comment..." maxlength="500"></textarea>
+        <button class="post" id="postBtn">Post Comment</button>
+        <div id="comments"></div>
+    </div>
+
+    <p class="developed-by">Developed by MUHAMMED JEMAL & ABDULHAKEM HASEN</p>
+
+    <script>
+        // --- LOGIN ---
+        const loginOverlay = document.getElementById('loginOverlay');
+        const usernameInput = document.getElementById('usernameInput');
+        const passwordContainer = document.getElementById('passwordContainer');
+        const passwordInput = document.getElementById('passwordInput');
+        const togglePass = document.getElementById('togglePass');
+        const loginBtn = document.getElementById('loginBtn');
+        const loginError = document.getElementById('loginError');
+
+        const PASSWORD = "rahaf";
+
+        usernameInput.addEventListener('input', () => {
+            if (usernameInput.value.trim() !== "") {
+                passwordContainer.style.display = "block";
+            } else {
+                passwordContainer.style.display = "none";
+            }
+            loginError.style.display = "none";
+        });
+
+        togglePass.addEventListener('click', () => {
+            passwordInput.type = passwordInput.type === "password" ? "text" : "password";
+        });
+
+        loginBtn.addEventListener('click', () => {
+            if (passwordInput.value === PASSWORD) {
+                loginOverlay.style.display = "none";
+            } else {
+                loginError.style.display = "block";
+            }
+        });
+
+        passwordInput.addEventListener('input', () => {
+            loginError.style.display = "none";
+        });
+
+        // --- COMMENTS ---
+        const STORAGE_KEY = "rahaf_comments_public";
+        const nameInput = document.querySelector("#name");
+        const commentInput = document.querySelector("#comment");
+        const postBtn = document.querySelector("#postBtn");
+        const commentsWrap = document.querySelector("#comments");
+        let comments = JSON.parse(localStorage.getItem(STORAGE_KEY) || "[]");
+
+        function escapeHtml(text) {
+            return text.replace(/[&<>"']/g, m => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", "\"": "&quot;", "'": "&#039;" }[m]));
+        }
+
+        function timeAgo(ts) {
+            const diff = Date.now() - ts;
+            const sec = Math.floor(diff / 1000);
+            if (sec < 60) return sec + "s ago";
+            const min = Math.floor(sec / 60);
+            if (min < 60) return min + "m ago";
+            const hr = Math.floor(min / 60);
+            if (hr < 24) return hr + "h ago";
+            const d = Math.floor(hr / 24);
+            return d + "d ago";
+        }
+
+        function renderComments() {
+            commentsWrap.innerHTML = "";
+            if (comments.length === 0) { commentsWrap.innerHTML = "<p style='color:#777;text-align:center;'>No comments yet — be the first!</p>"; return; }
+            comments.slice().reverse().forEach(c => {
+                const div = document.createElement("div");
+                div.className = "comment";
+                div.innerHTML = `<div class="name">${escapeHtml(c.name || "Anonymous")}</div>
+                           <div class="time">${timeAgo(c.ts)}</div>
+                           <div class="text">${escapeHtml(c.text)}</div>`;
+                commentsWrap.appendChild(div);
+            });
+        }
+
+        function saveComments() { localStorage.setItem(STORAGE_KEY, JSON.stringify(comments)); }
+
+        postBtn.addEventListener("click", () => {
+            const text = commentInput.value.trim();
+            if (!text) return;
+            const newComment = { name: nameInput.value.trim(), text, ts: Date.now() };
+            comments.push(newComment);
+            saveComments();
+            renderComments();
+            commentInput.value = "";
+        });
+
+        renderComments();
+    </script>
+
+</body>
+
+</html>
